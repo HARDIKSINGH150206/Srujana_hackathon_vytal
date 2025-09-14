@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYTAL - Chronic Disease Management Platform</title>
+    <link rel="stylesheet" href="../src/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Llama2 Chatbot Integration -->
+    <script type="module" src="../config/llama2.config.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNoGp43VglLTLaQjWoKWec1Wb1I9uokA0",
+            authDomain: "healthai-cf468.firebaseapp.com",
+            projectId: "healthai-cf468",
+            storageBucket: "healthai-cf468.firebasestorage.app",
+            messagingSenderId: "209710417191",
+            appId: "1:209710417191:web:2c67a1e0382f81e8d15502",
+            measurementId: "G-JERW0ZPDL6"
+          };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make Firebase available globally
+        window.firebase = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, setDoc, getDoc, collection, addDoc, updateDoc };
+        
+        // Trigger Firebase ready event
+        window.dispatchEvent(new CustomEvent('firebase-ready'));
+        
+        console.log('Firebase initialized successfully');
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>VYTAL</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="privacy-policy.html" class="nav-link">Privacy</a>
+                <button class="btn-primary" onclick="showLoginModal()">Get Started</button>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Revolutionary AI-Powered Chronic Disease Management</h1>
+                <p class="hero-subtitle">Experience personalized healthcare with your Digital Twin, AI Health Coach, and predictive risk management</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="showLoginModal()">Start Your Journey</button>
+                    <button class="btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+                    <button class="btn-secondary" onclick="testSignupDirect()" style="margin-left: 10px;">Test Signup</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="preview-card">
+                        <i class="fas fa-user-md"></i>
+                        <span>Digital Twin</span>
+                    </div>
+                    <a href="chatbot.html" style="text-decoration:none; color:inherit;">
+  <div class="preview-card">
+    <i class="fas fa-robot"></i>
+    <span>AI Coach</span>
+  </div>
+</a>
+                    <div class="preview-card">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Risk Radar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Revolutionary Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3>Digital Twin Dashboard</h3>
+                    <p>Personalized visualization of your genetics, lifestyle, and health data with predictive simulations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Health Coach</h3>
+                    <p>Adaptive conversational AI that learns your mood and motivation with gamification elements</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3>Smart Tracking</h3>
+                    <p>Medication adherence prediction, wearable sync, and photo-based food tracking</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Hub</h3>
+                    <p>AI-moderated peer support forums with caregiver integration and emergency alerts</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Doctor Portal</h3>
+                    <p>AI-generated patient summaries, risk scores, and treatment recommendations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>AI-Powered Security</h3>
+                    <p>Advanced AI chatbot with end-to-end encryption and GDPR-compliant health data protection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to HealthAI</h2>
+                <span class="close" onclick="closeLoginModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                    <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+                
+                <div id="loginForm" class="auth-form">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mfa">MFA Code</label>
+                            <input type="text" id="mfa" placeholder="Enter 6-digit code">
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Login</button>
+                        <div class="biometric-login">
+                            <button type="button" class="btn-secondary" onclick="biometricLogin()">
+                                <i class="fas fa-fingerprint"></i> Biometric Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="signupForm" class="auth-form" style="display: none;">
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select id="role" required>
+                                <option value="patient">Patient</option>
+                                <option value="caregiver">Caregiver</option>
+                                <option value="doctor">Doctor</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (Hidden by default) -->
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <!-- Dashboard content will be loaded here -->
+         <div id="riskRadarSection" style="max-width: 500px; margin: 40px auto;">
+        <h3>Risk Radar</h3>
+        <canvas id="riskRadarChart"></canvas>
+    </div>
+</div>
+
+    <script src="../src/js/firebase-config.js"></script>
+    <script src="../src/js/script.js"></script>
+    <script src="../src/js/dashboard-components.js"></script>
+
+</script>
+<script src='https://cdn.jotfor.ms/agent/embedjs/01994872fc5378edae0d64a419f7e6f98f74/embed.js'>
+</script>
+</body>
+</html>

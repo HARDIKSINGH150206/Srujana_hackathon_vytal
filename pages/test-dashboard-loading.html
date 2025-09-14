@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Loading Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>Dashboard Loading Test</h1>
+        
+        <div style="margin: 20px 0;">
+            <button onclick="testFunctionExists()" class="btn-primary">Test Functions</button>
+            <button onclick="testCardGeneration()" class="btn-secondary">Test Card Generation</button>
+            <button onclick="testFullDashboard()" class="btn-secondary">Test Full Dashboard</button>
+        </div>
+        
+        <div id="debugOutput" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Debug Output:</h3>
+            <div id="debugLog"></div>
+        </div>
+        
+        <!-- Dashboard (Hidden by default) -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            <!-- Dashboard content will be loaded here -->
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="dashboard-components.js"></script>
+    
+    <script>
+        // Global variables
+        let currentUser = {
+            id: 'test_user_123',
+            email: 'test@example.com',
+            role: 'patient',
+            name: 'Test User',
+            avatar: 'T',
+            preferences: {
+                theme: 'light',
+                notifications: true,
+                biometric: false
+            },
+            healthData: {
+                conditions: [],
+                medications: [],
+                lastCheckup: null,
+                riskScore: 0,
+                bloodSugarHistory: [140, 135, 130, 125, 120, 125],
+                bloodPressureHistory: [
+                    {systolic: 150, diastolic: 90},
+                    {systolic: 145, diastolic: 85},
+                    {systolic: 140, diastolic: 80}
+                ],
+                medicationHistory: Array(30).fill({taken: true}),
+                lifestyleData: {
+                    exercise: 120,
+                    sleep: 7,
+                    stress: 5,
+                    smoking: false,
+                    alcohol: 1
+                },
+                geneticProfile: {
+                    familyHistory: {
+                        diabetes: true,
+                        heartDisease: false,
+                        hypertension: true
+                    }
+                }
+            }
+        };
+        
+        let healthDashboard = {
+            riskPredictions: [
+                { condition: 'Diabetes', risk: 65, timeframe: '3 months' },
+                { condition: 'Hypertension', risk: 45, timeframe: '6 months' }
+            ],
+            patients: [
+                { name: 'John Doe', riskScore: 65, lastVisit: '2 weeks ago' },
+                { name: 'Jane Smith', riskScore: 45, lastVisit: '1 week ago' }
+            ]
+        };
+        
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            console.log(message);
+        }
+        
+        function testFunctionExists() {
+            log('=== TESTING FUNCTION EXISTENCE ===');
+            
+            const functions = [
+                'generateDigitalTwinCard',
+                'generateAICoachCard', 
+                'generateTrackingCard',
+                'generateCommunityCard',
+                'generateRiskRadarCard',
+                'generateDoctorPortalCard',
+                'generateSecurityCard',
+                'initializeDigitalTwin',
+                'initializeAICoach',
+                'initializeTracking',
+                'initializeRiskRadar',
+                'getBlockchainRecordCount'
+            ];
+            
+            functions.forEach(funcName => {
+                if (typeof window[funcName] === 'function') {
+                    log(`✅ ${funcName} exists`);
+                } else {
+                    log(`❌ ${funcName} MISSING`);
+                }
+            });
+        }
+        
+        function testCardGeneration() {
+            log('=== TESTING CARD GENERATION ===');
+            
+            const cardFunctions = [
+                'generateDigitalTwinCard',
+                'generateAICoachCard', 
+                'generateTrackingCard',
+                'generateCommunityCard',
+                'generateRiskRadarCard',
+                'generateDoctorPortalCard',
+                'generateSecurityCard'
+            ];
+            
+            cardFunctions.forEach(funcName => {
+                try {
+                    const result = window[funcName]();
+                    if (result && result.includes('dashboard-card')) {
+                        log(`✅ ${funcName} generated successfully`);
+                    } else {
+                        log(`⚠️ ${funcName} returned empty or invalid result`);
+                    }
+                } catch (error) {
+                    log(`❌ ${funcName} failed: ${error.message}`);
+                }
+            });
+        }
+        
+        function testFullDashboard() {
+            log('=== TESTING FULL DASHBOARD ===');
+            
+            try {
+                log('Calling showDashboard()...');
+                showDashboard();
+                log('showDashboard() completed successfully');
+                
+                // Check if dashboard is visible
+                const dashboard = document.getElementById('dashboard');
+                if (dashboard && dashboard.style.display !== 'none') {
+                    log('✅ Dashboard is visible');
+                } else {
+                    log('❌ Dashboard is not visible');
+                }
+                
+                // Check if dashboard has content
+                if (dashboard && dashboard.innerHTML.trim().length > 0) {
+                    log('✅ Dashboard has content');
+                } else {
+                    log('❌ Dashboard is empty');
+                }
+                
+            } catch (error) {
+                log(`❌ Dashboard test failed: ${error.message}`);
+                log(`Error stack: ${error.stack}`);
+            }
+        }
+        
+        // Override showNotification to work in this context
+        function showNotification(message, type) {
+            log(`NOTIFICATION [${type.toUpperCase()}]: ${message}`);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Test page loaded');
+            log('Current user: ' + currentUser.name);
+        });
+    </script>
+    
+    <style>
+        #debugLog {
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        #debugLog div {
+            margin: 2px 0;
+            padding: 2px 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            border-left: 3px solid #4facfe;
+        }
+    </style>
+</body>
+</html>

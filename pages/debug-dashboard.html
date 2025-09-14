@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Debug Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNoGp43VglLTLaQjWoKWec1Wb1I9uokA0",
+            authDomain: "healthai-cf468.firebaseapp.com",
+            projectId: "healthai-cf468",
+            storageBucket: "healthai-cf468.firebasestorage.app",
+            messagingSenderId: "209710417191",
+            appId: "1:209710417191:web:2c67a1e0382f81e8d15502",
+            measurementId: "G-JERW0ZPDL6"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make Firebase available globally
+        window.firebase = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, setDoc, getDoc, collection, addDoc, updateDoc };
+        
+        // Trigger Firebase ready event
+        window.dispatchEvent(new CustomEvent('firebase-ready'));
+        
+        console.log('Firebase initialized successfully');
+    </script>
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>Dashboard Debug Test</h1>
+        
+        <div style="margin: 20px 0;">
+            <button onclick="testDashboard()" class="btn-primary">Test Dashboard</button>
+            <button onclick="testSignup()" class="btn-secondary">Test Signup</button>
+            <button onclick="clearData()" class="btn-secondary">Clear Data</button>
+        </div>
+        
+        <div id="debugOutput" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Debug Output:</h3>
+            <div id="debugLog"></div>
+        </div>
+        
+        <!-- Dashboard (Hidden by default) -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            <!-- Dashboard content will be loaded here -->
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="dashboard-components.js"></script>
+    
+    <script>
+        // Global variables
+        let currentUser = null;
+        let healthDashboard = {
+            riskPredictions: [
+                { condition: 'Diabetes', risk: 65, timeframe: '3 months' },
+                { condition: 'Hypertension', risk: 45, timeframe: '6 months' }
+            ],
+            patients: [
+                { name: 'John Doe', riskScore: 65, lastVisit: '2 weeks ago' },
+                { name: 'Jane Smith', riskScore: 45, lastVisit: '1 week ago' }
+            ]
+        };
+        
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            console.log(message);
+        }
+        
+        function testSignup() {
+            log('=== TESTING SIGNUP ===');
+            
+            // Create a test user
+            currentUser = {
+                id: 'test_user_123',
+                email: 'test@example.com',
+                role: 'patient',
+                name: 'Test User',
+                avatar: 'T',
+                preferences: {
+                    theme: 'light',
+                    notifications: true,
+                    biometric: false
+                },
+                healthData: {
+                    conditions: [],
+                    medications: [],
+                    lastCheckup: null,
+                    riskScore: 0,
+                    bloodSugarHistory: [140, 135, 130, 125, 120, 125],
+                    bloodPressureHistory: [
+                        {systolic: 150, diastolic: 90},
+                        {systolic: 145, diastolic: 85},
+                        {systolic: 140, diastolic: 80}
+                    ],
+                    medicationHistory: Array(30).fill({taken: true}),
+                    lifestyleData: {
+                        exercise: 120,
+                        sleep: 7,
+                        stress: 5,
+                        smoking: false,
+                        alcohol: 1
+                    },
+                    geneticProfile: {
+                        familyHistory: {
+                            diabetes: true,
+                            heartDisease: false,
+                            hypertension: true
+                        }
+                    }
+                }
+            };
+            
+            log('Test user created: ' + currentUser.name);
+            log('User data: ' + JSON.stringify(currentUser, null, 2));
+            
+            // Store in localStorage
+            localStorage.setItem('healthAI_user', JSON.stringify(currentUser));
+            log('User data stored in localStorage');
+            
+            showNotification('Test user created successfully!', 'success');
+        }
+        
+        function testDashboard() {
+            log('=== TESTING DASHBOARD ===');
+            
+            if (!currentUser) {
+                log('ERROR: No current user found');
+                showNotification('Please create a test user first', 'error');
+                return;
+            }
+            
+            log('Current user: ' + currentUser.name);
+            log('User role: ' + currentUser.role);
+            
+            try {
+                log('Calling showDashboard()...');
+                showDashboard();
+                log('showDashboard() completed');
+            } catch (error) {
+                log('ERROR in showDashboard(): ' + error.message);
+                log('Error stack: ' + error.stack);
+                showNotification('Dashboard error: ' + error.message, 'error');
+            }
+        }
+        
+        function clearData() {
+            log('=== CLEARING DATA ===');
+            currentUser = null;
+            localStorage.removeItem('healthAI_user');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('dashboard').innerHTML = '';
+            log('Data cleared');
+            showNotification('Data cleared', 'success');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Debug page loaded');
+            
+            // Check if there's existing user data
+            const storedUser = localStorage.getItem('healthAI_user');
+            if (storedUser) {
+                try {
+                    currentUser = JSON.parse(storedUser);
+                    log('Found existing user: ' + currentUser.name);
+                } catch (error) {
+                    log('Error parsing stored user: ' + error.message);
+                }
+            }
+        });
+        
+        // Override showNotification to work in this context
+        function showNotification(message, type) {
+            log(`NOTIFICATION [${type.toUpperCase()}]: ${message}`);
+            alert(`${type.toUpperCase()}: ${message}`);
+        }
+    </script>
+    
+    <style>
+        #debugLog {
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        #debugLog div {
+            margin: 2px 0;
+            padding: 2px 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            border-left: 3px solid #4facfe;
+        }
+    </style>
+</body>
+</html>

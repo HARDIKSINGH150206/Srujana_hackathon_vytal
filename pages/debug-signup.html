@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI - Signup Debug</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div style="padding: 50px; max-width: 500px; margin: 0 auto;">
+        <h1>HealthAI Signup Debug</h1>
+        
+        <!-- Simple Signup Form -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Account</h2>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="testSignup(event)">
+                    <div class="form-group">
+                        <label for="testEmail">Email</label>
+                        <input type="email" id="testEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testPassword">Password</label>
+                        <input type="password" id="testPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testRole">Role</label>
+                        <select id="testRole" required>
+                            <option value="patient">Patient</option>
+                            <option value="caregiver">Caregiver</option>
+                            <option value="doctor">Doctor</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Create Account</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="debugOutput" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Debug Output:</h3>
+            <div id="debugLog"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            console.log(message);
+        }
+        
+        async function testSignup(event) {
+            event.preventDefault();
+            
+            log('Signup form submitted');
+            
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            const role = document.getElementById('testRole').value;
+            
+            log(`Email: ${email}, Role: ${role}`);
+            
+            // Validate inputs
+            if (!email || !password || !role) {
+                log('ERROR: Please fill in all fields');
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                log('ERROR: Password too short');
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+            
+            const loadingBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = loadingBtn.textContent;
+            loadingBtn.innerHTML = '<span class="loading"></span> Creating Account...';
+            loadingBtn.disabled = true;
+            
+            try {
+                log('Starting account creation...');
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Create user object
+                currentUser = {
+                    id: 'user_' + Date.now(),
+                    email: email,
+                    role: role,
+                    name: email.split('@')[0],
+                    avatar: email.charAt(0).toUpperCase(),
+                    preferences: {
+                        theme: 'light',
+                        notifications: true,
+                        biometric: false
+                    },
+                    healthData: {
+                        conditions: [],
+                        medications: [],
+                        lastCheckup: null,
+                        riskScore: 0
+                    }
+                };
+                
+                log(`User created: ${JSON.stringify(currentUser, null, 2)}`);
+                
+                // Store user data
+                localStorage.setItem('healthAI_user', JSON.stringify(currentUser));
+                log('User data stored in localStorage');
+                
+                // Success
+                log('SUCCESS: Account created successfully!');
+                alert('Account created successfully! Check the debug log for details.');
+                
+                // Clear form
+                document.getElementById('testEmail').value = '';
+                document.getElementById('testPassword').value = '';
+                document.getElementById('testRole').value = 'patient';
+                
+            } catch (error) {
+                log(`ERROR: ${error.message}`);
+                alert('Signup failed: ' + error.message);
+            } finally {
+                loadingBtn.textContent = originalText;
+                loadingBtn.disabled = false;
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Debug page loaded');
+            log('Testing signup functionality...');
+        });
+    </script>
+    
+    <style>
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #debugLog {
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        #debugLog div {
+            margin: 2px 0;
+            padding: 2px 5px;
+            background: white;
+            border-radius: 3px;
+        }
+    </style>
+</body>
+</html>

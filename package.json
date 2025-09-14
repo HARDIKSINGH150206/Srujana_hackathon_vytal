@@ -1,0 +1,49 @@
+{
+  "name": "healthai-chronic-disease-management",
+  "version": "1.0.0",
+  "description": "Revolutionary AI-powered chronic disease management platform featuring Digital Twin technology, predictive analytics, and blockchain-secured health records",
+  "main": "pages/index.html",
+  "scripts": {
+    "start": "npx live-server --port=3000 --open=pages/index.html",
+    "dev": "npx live-server --port=3000 --open=pages/index.html --watch=src",
+    "build": "echo 'Build process not implemented yet'",
+    "test": "echo 'Tests not implemented yet'",
+    "lint": "echo 'Linting not implemented yet'"
+  },
+  "keywords": [
+    "healthcare",
+    "ai",
+    "chronic-disease",
+    "digital-twin",
+    "blockchain",
+    "health-management",
+    "predictive-analytics",
+    "medical-records"
+  ],
+  "author": "HealthAI Technologies Inc.",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "web3": "^4.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/healthai/healthai-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/healthai/healthai-platform/issues"
+  },
+  "homepage": "https://healthai.com",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
+

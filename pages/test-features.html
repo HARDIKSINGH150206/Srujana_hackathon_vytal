@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI - Feature Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+        <h1>HealthAI Feature Test</h1>
+        <p>This page tests the Doctor Portal, AI Risk Radar, and Security & Privacy features.</p>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn-primary" onclick="testDoctorPortal()">Test Doctor Portal</button>
+            <button class="btn-primary" onclick="testRiskRadar()">Test AI Risk Radar</button>
+            <button class="btn-primary" onclick="testSecurityPrivacy()">Test Security & Privacy</button>
+        </div>
+        
+        <div id="testResults" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="dashboard-components.js"></script>
+    
+    <script>
+        // Test functions
+        function testDoctorPortal() {
+            // Simulate doctor user
+            currentUser = {
+                id: 'doctor_123',
+                email: 'doctor@healthai.com',
+                role: 'doctor',
+                name: 'Dr. Smith',
+                avatar: 'DS'
+            };
+            
+            // Test doctor portal functions
+            try {
+                generateReport();
+                showNotification('Doctor Portal test completed successfully!', 'success');
+                document.getElementById('testResults').innerHTML += '<div class="success">✓ Doctor Portal: Working</div>';
+            } catch (error) {
+                showNotification('Doctor Portal test failed: ' + error.message, 'error');
+                document.getElementById('testResults').innerHTML += '<div class="error">✗ Doctor Portal: Failed</div>';
+            }
+        }
+        
+        function testRiskRadar() {
+            // Simulate patient user
+            currentUser = {
+                id: 'patient_123',
+                email: 'patient@healthai.com',
+                role: 'patient',
+                name: 'John Doe',
+                avatar: 'JD',
+                healthData: {
+                    bloodSugarHistory: [140, 135, 130, 125, 120, 125],
+                    bloodPressureHistory: [
+                        {systolic: 150, diastolic: 90},
+                        {systolic: 145, diastolic: 85},
+                        {systolic: 140, diastolic: 80}
+                    ],
+                    medicationHistory: Array(30).fill({taken: true}),
+                    lifestyleData: {
+                        exercise: 120,
+                        sleep: 7,
+                        stress: 5,
+                        smoking: false,
+                        alcohol: 1
+                    },
+                    geneticProfile: {
+                        familyHistory: {
+                            diabetes: true,
+                            heartDisease: false,
+                            hypertension: true
+                        }
+                    }
+                }
+            };
+            
+            try {
+                // Initialize risk prediction
+                if (typeof healthDashboard !== 'undefined') {
+                    healthDashboard.calculateRiskScore(currentUser.healthData).then(riskData => {
+                        healthDashboard.riskPredictions = riskData;
+                        viewRiskDetails();
+                        showNotification('AI Risk Radar test completed successfully!', 'success');
+                        document.getElementById('testResults').innerHTML += '<div class="success">✓ AI Risk Radar: Working</div>';
+                    });
+                } else {
+                    throw new Error('HealthDashboard not available');
+                }
+            } catch (error) {
+                showNotification('AI Risk Radar test failed: ' + error.message, 'error');
+                document.getElementById('testResults').innerHTML += '<div class="error">✗ AI Risk Radar: Failed</div>';
+            }
+        }
+        
+        function testSecurityPrivacy() {
+            try {
+                // Test security indicator
+                addSecurityIndicator();
+                
+                // Test blockchain logging
+                if (typeof healthDashboard !== 'undefined') {
+                    healthDashboard.logHealthEvent('test_event', {test: true});
+                }
+                
+                // Test privacy functions
+                showSecurityDetails();
+                showNotification('Security & Privacy test completed successfully!', 'success');
+                document.getElementById('testResults').innerHTML += '<div class="success">✓ Security & Privacy: Working</div>';
+            } catch (error) {
+                showNotification('Security & Privacy test failed: ' + error.message, 'error');
+                document.getElementById('testResults').innerHTML += '<div class="error">✗ Security & Privacy: Failed</div>';
+            }
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            initializeBlockchain();
+            initializeAdvancedFeatures();
+        });
+    </script>
+    
+    <style>
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</body>
+</html>

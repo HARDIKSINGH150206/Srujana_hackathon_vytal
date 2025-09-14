@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Debug Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNoGp43VglLTLaQjWoKWec1Wb1I9uokA0",
+            authDomain: "healthai-cf468.firebaseapp.com",
+            projectId: "healthai-cf468",
+            storageBucket: "healthai-cf468.firebasestorage.app",
+            messagingSenderId: "209710417191",
+            appId: "1:209710417191:web:2c67a1e0382f81e8d15502",
+            measurementId: "G-JERW0ZPDL6"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make Firebase available globally
+        window.firebase = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, setDoc, getDoc, collection, addDoc, updateDoc };
+        
+        // Trigger Firebase ready event
+        window.dispatchEvent(new CustomEvent('firebase-ready'));
+        
+        console.log('Firebase initialized successfully');
+    </script>
+</head>
+<body>
+    <div style="padding: 50px; max-width: 600px; margin: 0 auto;">
+        <h1>Signup Debug Test</h1>
+        
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Test Signup</h2>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="testSignup(event)">
+                    <div class="form-group">
+                        <label for="testEmail">Email</label>
+                        <input type="email" id="testEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testPassword">Password</label>
+                        <input type="password" id="testPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testRole">Role</label>
+                        <select id="testRole" required>
+                            <option value="patient">Patient</option>
+                            <option value="caregiver">Caregiver</option>
+                            <option value="doctor">Doctor</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Test Signup</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="debugOutput" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Debug Output:</h3>
+            <div id="debugLog"></div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            console.log(message);
+        }
+        
+        async function testSignup(event) {
+            event.preventDefault();
+            
+            log('=== SIGNUP TEST STARTED ===');
+            
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            const role = document.getElementById('testRole').value;
+            
+            log(`Email: ${email}, Role: ${role}`);
+            
+            // Validate inputs
+            if (!email || !password || !role) {
+                log('ERROR: Please fill in all fields');
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                log('ERROR: Password too short');
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+            
+            const loadingBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = loadingBtn.textContent;
+            loadingBtn.innerHTML = '<span class="loading"></span> Testing...';
+            loadingBtn.disabled = true;
+            
+            try {
+                log('Checking Firebase availability...');
+                
+                // Check if Firebase is available
+                if (!window.firebaseService || !window.firebaseService.isReady()) {
+                    throw new Error('Firebase not initialized. Please check your Firebase configuration.');
+                }
+                
+                log('Firebase is ready!');
+                
+                // Prepare user data
+                const userData = {
+                    role: role,
+                    name: email.split('@')[0],
+                    avatar: email.charAt(0).toUpperCase(),
+                    preferences: {
+                        theme: 'light',
+                        notifications: true,
+                        biometric: false
+                    },
+                    healthData: {
+                        conditions: [],
+                        medications: [],
+                        lastCheckup: null,
+                        riskScore: 0,
+                        bloodSugarHistory: [140, 135, 130, 125, 120, 125],
+                        bloodPressureHistory: [
+                            {systolic: 150, diastolic: 90},
+                            {systolic: 145, diastolic: 85},
+                            {systolic: 140, diastolic: 80}
+                        ],
+                        medicationHistory: Array(30).fill({taken: true}),
+                        lifestyleData: {
+                            exercise: 120,
+                            sleep: 7,
+                            stress: 5,
+                            smoking: false,
+                            alcohol: 1
+                        },
+                        geneticProfile: {
+                            familyHistory: {
+                                diabetes: role === 'patient',
+                                heartDisease: false,
+                                hypertension: role === 'patient'
+                            }
+                        }
+                    }
+                };
+                
+                log('Creating user with Firebase...');
+                
+                // Create user with Firebase
+                const firebaseUser = await window.firebaseService.createUser(email, password, userData);
+                
+                log(`Firebase user created: ${firebaseUser.uid}`);
+                
+                // Get complete user data from Firebase
+                const completeUserData = await window.firebaseService.getUserData(firebaseUser.uid);
+                
+                log('User data retrieved from Firebase');
+                
+                // Set current user
+                currentUser = {
+                    id: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    ...completeUserData
+                };
+                
+                log(`SUCCESS: User created successfully!`);
+                log(`User ID: ${currentUser.id}`);
+                log(`User Email: ${currentUser.email}`);
+                log(`User Role: ${currentUser.role}`);
+                
+                alert('Signup test successful! Check the debug log for details.');
+                
+                // Clear form
+                document.getElementById('testEmail').value = '';
+                document.getElementById('testPassword').value = '';
+                document.getElementById('testRole').value = 'patient';
+                
+            } catch (error) {
+                log(`ERROR: ${error.message}`);
+                log(`Error code: ${error.code || 'N/A'}`);
+                log(`Error stack: ${error.stack || 'N/A'}`);
+                
+                let errorMessage = 'Signup failed: ' + error.message;
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password is too weak. Please choose a stronger password.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email address. Please enter a valid email.';
+                } else if (error.message.includes('Firebase not initialized')) {
+                    errorMessage = 'Firebase not configured. Please check the setup instructions.';
+                }
+                
+                alert(errorMessage);
+            } finally {
+                loadingBtn.textContent = originalText;
+                loadingBtn.disabled = false;
+                log('=== SIGNUP TEST COMPLETED ===');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Debug page loaded');
+            log('Waiting for Firebase to initialize...');
+            
+            // Wait for Firebase to be ready
+            const checkFirebase = () => {
+                if (window.firebaseService && window.firebaseService.isReady()) {
+                    log('Firebase service is ready!');
+                } else {
+                    log('Firebase service not ready yet, checking again...');
+                    setTimeout(checkFirebase, 100);
+                }
+            };
+            
+            setTimeout(checkFirebase, 1000);
+        });
+    </script>
+    
+    <style>
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #debugLog {
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        #debugLog div {
+            margin: 2px 0;
+            padding: 2px 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            border-left: 3px solid #4facfe;
+        }
+    </style>
+</body>
+</html>

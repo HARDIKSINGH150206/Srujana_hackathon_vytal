@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI - Demo Version (No Firebase Required)</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealthAI</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="privacy-policy.html" class="nav-link">Privacy</a>
+                <button class="btn-primary" onclick="showLoginModal()">Get Started</button>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Revolutionary AI-Powered Chronic Disease Management</h1>
+                <p class="hero-subtitle">Experience personalized healthcare with your Digital Twin, AI Health Coach, and predictive risk management</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="showLoginModal()">Start Your Journey</button>
+                    <button class="btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+                    <button class="btn-secondary" onclick="testSignupDirect()" style="margin-left: 10px;">Demo Login</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="preview-card">
+                        <i class="fas fa-user-md"></i>
+                        <span>Digital Twin</span>
+                    </div>
+                    <div class="preview-card">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Coach</span>
+                    </div>
+                    <div class="preview-card">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Risk Radar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Revolutionary Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3>Digital Twin Dashboard</h3>
+                    <p>Personalized visualization of your genetics, lifestyle, and health data with predictive simulations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Health Coach</h3>
+                    <p>Adaptive conversational AI that learns your mood and motivation with gamification elements</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3>Smart Tracking</h3>
+                    <p>Medication adherence prediction, wearable sync, and photo-based food tracking</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Hub</h3>
+                    <p>AI-moderated peer support forums with caregiver integration and emergency alerts</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Doctor Portal</h3>
+                    <p>AI-generated patient summaries, risk scores, and treatment recommendations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Blockchain Security</h3>
+                    <p>End-to-end encryption with blockchain-backed medical records and GDPR compliance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to HealthAI</h2>
+                <span class="close" onclick="closeLoginModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                    <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+                
+                <div id="loginForm" class="auth-form">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mfa">MFA Code</label>
+                            <input type="text" id="mfa" placeholder="Enter 6-digit code">
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Login</button>
+                        <div class="biometric-login">
+                            <button type="button" class="btn-secondary" onclick="biometricLogin()">
+                                <i class="fas fa-fingerprint"></i> Biometric Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="signupForm" class="auth-form" style="display: none;">
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select id="role" required>
+                                <option value="patient">Patient</option>
+                                <option value="caregiver">Caregiver</option>
+                                <option value="doctor">Doctor</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (Hidden by default) -->
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <!-- Dashboard content will be loaded here -->
+    </div>
+
+    <script src="script.js"></script>
+    <script src="dashboard-components.js"></script>
+    
+    <!-- Demo Notice -->
+    <div style="position: fixed; top: 0; left: 0; right: 0; background: #ff6b6b; color: white; padding: 10px; text-align: center; z-index: 9999;">
+        <strong>DEMO VERSION:</strong> This version works without Firebase configuration. For full functionality, set up Firebase following the FIREBASE_SETUP.md guide.
+    </div>
+</body>
+</html>
