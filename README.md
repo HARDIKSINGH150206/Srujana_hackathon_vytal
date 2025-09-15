@@ -63,7 +63,6 @@ health-care/
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Charts**: Chart.js for data visualization
-- **Blockchain**: Web3.js for blockchain integration
 - **Authentication**: Firebase Authentication
 - **Database**: Firebase Firestore
 - **Icons**: Font Awesome 6.0
@@ -206,8 +205,6 @@ The application is fully responsive and optimized for:
 - Tablets (768px - 1199px)
 - Mobile phones (320px - 767px)
 
-## 🔧 Development
-
 ### Scripts
 
 - `npm start` - Start development server
@@ -239,24 +236,4 @@ The application is fully responsive and optimized for:
 - **AI Model Training**: Continuous improvement of AI algorithms
 - **Biomarker Analysis**: Advanced health marker interpretation
 - **Personalized Medicine**: Tailored treatment recommendations
-
-## 🤝 Contributing
-
-We welcome contributions to improve HealthAI! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-
-## 🙏 Acknowledgments
-
-- Healthcare professionals who provided domain expertise
-- Open source community for tools and libraries
-- Beta testers for valuable feedback
-- Research institutions for health data insights
-
----
 
