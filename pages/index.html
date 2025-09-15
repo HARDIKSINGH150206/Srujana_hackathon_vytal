@@ -226,5 +226,64 @@
 </script>
 <script src='https://cdn.jotfor.ms/agent/embedjs/01994872fc5378edae0d64a419f7e6f98f74/embed.js'>
 </script>
+<script src="../src/js/firebase-config.js"></script>
+<script src="../src/js/script.js"></script>
+<script src="../src/js/dashboard-components.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  // Make sure dashboard is visible
+  document.getElementById("dashboard").style.display = "block";
+
+  // Example test data
+  const userData = {
+    bloodSugarHistory: [120, 130, 150, 160, 170, 180, 190],
+    bloodPressureHistory: [
+      { systolic: 130, diastolic: 85 },
+      { systolic: 135, diastolic: 88 },
+      { systolic: 145, diastolic: 92 }
+    ],
+    medicationHistory: Array(30).fill({ taken: true }),
+    lifestyleData: { exercise: 120, sleep: 6, stress: 8, smoking: true, alcohol: 3 },
+    geneticProfile: { familyHistory: { diabetes: true, heartDisease: false, hypertension: true } }
+  };
+
+  // Calculate risks
+  const riskData = await window.healthDashboard.calculateRiskScore(userData);
+
+  // Render chart
+  const ctx = document.getElementById("riskRadarChart").getContext("2d");
+  new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels: ["Blood Sugar", "Blood Pressure", "Medication", "Lifestyle", "Genetics"],
+      datasets: [{
+        label: "Risk Levels",
+        data: [
+          riskData.riskFactors.bloodSugar,
+          riskData.riskFactors.bloodPressure,
+          riskData.riskFactors.medicationAdherence,
+          riskData.riskFactors.lifestyle,
+          riskData.riskFactors.genetics
+        ],
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+});
+</script>
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/.../embed.js'></script>
 </body>
 </html>
+
