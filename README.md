@@ -67,7 +67,7 @@ health-care/
 - **Database**: Firebase Firestore
 - **Icons**: Font Awesome 6.0
 - **Fonts**: Inter (Google Fonts)
-- **Security**: AES-256 encryption, blockchain logging
+- **Security**: AES-256 encryption
 - **Responsive Design**: Mobile-first approach with CSS Grid and Flexbox
 
 ## 🚀 Getting Started
