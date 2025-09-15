@@ -151,20 +151,6 @@ health-care/
 - Personalized intervention recommendations
 - Risk trend analysis
 
-## 🔒 Security & Privacy
-
-### Data Protection
-- **End-to-End Encryption**: All health data encrypted with AES-256
-- **Blockchain Security**: Immutable audit trails for medical records
-- **Zero-Knowledge Architecture**: Verify data without accessing sensitive information
-- **GDPR Compliance**: Full compliance with international data protection regulations
-
-### Privacy Features
-- **Data Export**: Download all personal data
-- **Data Deletion**: Complete data removal option
-- **Consent Management**: Granular control over data usage
-- **Anonymization**: Data anonymization for research purposes
-
 ## 🎮 Gamification System
 
 ### Achievements
@@ -264,16 +250,6 @@ We welcome contributions to improve HealthAI! Please:
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📞 Support
-
-- **Email**: support@healthai.com
-- **Phone**: +1 (555) 123-4567
-- **Documentation**: [HealthAI Docs](https://docs.healthai.com)
-- **Community**: [HealthAI Forum](https://forum.healthai.com)
 
 ## 🙏 Acknowledgments
 
@@ -284,6 +260,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**HealthAI** - Revolutionizing chronic disease management through AI-powered personalized healthcare.
-
-*Built with ❤️ for better health outcomes*
