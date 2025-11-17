@@ -55,6 +55,7 @@
                 <a href="#about" class="nav-link">About</a>
                 <a href="#contact" class="nav-link">Contact</a>
                 <a href="privacy-policy.html" class="nav-link">Privacy</a>
+                <button id="theme-toggle" class="btn-secondary" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <button class="btn-primary" onclick="showLoginModal()">Get Started</button>
             </div>
             <div class="hamburger" id="hamburger">
@@ -69,31 +70,36 @@
     <section id="home" class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1 class="hero-title">Revolutionary AI-Powered Chronic Disease Management</h1>
+                <h1 class="hero-title">Revolutionary AI-Powered <span class="hero-accent">Chronic Disease Management</span></h1>
                 <p class="hero-subtitle">Experience personalized healthcare with your Digital Twin, AI Health Coach, and predictive risk management</p>
+
+                <div class="hero-badges" aria-hidden="true">
+                    <span class="badge">Personalized</span>
+                    <span class="badge">Predictive</span>
+                    <span class="badge">Secure</span>
+                </div>
+
                 <div class="hero-buttons">
-                    <button class="btn-primary" onclick="showLoginModal()">Start Your Journey</button>
-                    <button class="btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+                    <div class="cta-wrap">
+                        <button class="btn-primary" onclick="showLoginModal()">Start Your Journey</button>
+                        <button class="btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+                    </div>
                     <button class="btn-secondary" onclick="testSignupDirect()" style="margin-left: 10px;">Test Signup</button>
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="dashboard-preview">
-                    <div class="preview-card">
-                        <i class="fas fa-user-md"></i>
-                        <span>Digital Twin</span>
-                    </div>
-                    <a href="chatbot.html" style="text-decoration:none; color:inherit;">
-  <div class="preview-card">
-    <i class="fas fa-robot"></i>
-    <span>AI Coach</span>
-  </div>
-</a>
-                    <div class="preview-card">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Risk Radar</span>
-                    </div>
-                </div>
+                <!-- React will mount here to render animated preview cards -->
+                <div id="react-root" class="hero-react-root"></div>
+                <!-- decorative SVG accent -->
+                <svg class="hero-decor" width="480" height="480" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                      <stop offset="0" stop-color="#ff3b3b" stop-opacity="0.08" />
+                      <stop offset="1" stop-color="#b30000" stop-opacity="0.02" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="240" cy="240" r="220" fill="url(#g1)" />
+                </svg>
             </div>
         </div>
     </section>
@@ -222,13 +228,14 @@
     <script src="../src/js/firebase-config.js"></script>
     <script src="../src/js/script.js"></script>
     <script src="../src/js/dashboard-components.js"></script>
+    <!-- React + Framer Motion small app (ESM imports) -->
+    <script type="module" src="../src/js/react-app.js"></script>
 
-</script>
-<script src='https://cdn.jotfor.ms/agent/embedjs/01994872fc5378edae0d64a419f7e6f98f74/embed.js'>
-</script>
-<script src="../src/js/firebase-config.js"></script>
-<script src="../src/js/script.js"></script>
-<script src="../src/js/dashboard-components.js"></script>
+    <script src='https://cdn.jotfor.ms/agent/embedjs/01994872fc5378edae0d64a419f7e6f98f74/embed.js'>
+    </script>
+    <script src="../src/js/firebase-config.js"></script>
+    <script src="../src/js/script.js"></script>
+    <script src="../src/js/dashboard-components.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {

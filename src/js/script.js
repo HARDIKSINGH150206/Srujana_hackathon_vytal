@@ -5,6 +5,7 @@ let blockchainContract = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
     initializeApp();
     setupEventListeners();
     initializeBlockchain();
@@ -113,6 +114,45 @@ function setupEventListeners() {
             }
         });
     });
+
+    // Theme toggle button (if present)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleTheme);
+    }
+}
+
+// Theme helpers: initialize, apply and toggle (persisted to localStorage)
+function initializeTheme() {
+    try {
+        const saved = localStorage.getItem('theme');
+        let theme = saved;
+        if (!theme) {
+            // fall back to system preference
+            theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        }
+        applyTheme(theme);
+    } catch (e) {
+        console.warn('Theme init failed', e);
+    }
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark');
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.innerHTML = '<i class="fas fa-sun"></i>';
+    } else {
+        document.body.classList.remove('dark');
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.innerHTML = '<i class="fas fa-moon"></i>';
+    }
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+}
+
+function toggleTheme() {
+    const isDark = document.body.classList.contains('dark');
+    applyTheme(isDark ? 'light' : 'dark');
 }
 
 // Initialize blockchain connection
